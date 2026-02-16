@@ -1,86 +1,291 @@
 ---
 title: "How to Create Interactive Blog Posts with MDX"
 publishedAt: "2026-02-16"
-summary: "A comprehensive guide to building rich, interactive blog posts using MDX in your Next.js blog."
+summary: "A practical, copy-paste guide to shipping rich interactive posts using only .mdx files in this blog."
 ---
 
 # How to Create Interactive Blog Posts with MDX
 
-Welcome to your new blog platform! This guide will teach you how to create rich blog posts using MDX.
+This blog is set up so you can publish advanced, interactive posts by editing only files in `content/*.mdx`.
+You do not need to touch React page code for normal publishing.
 
-## Getting Started
+## What You Can Deliver with `.mdx`
 
-All blog posts live in the `content/` directory as `.mdx` files. Each post needs frontmatter:
+With MDX in this repo, a single post can include:
 
-```yaml
+- rich prose and structured writing
+- syntax-highlighted code
+- callouts and pull quotes
+- animated stats
+- before/after image scrubbers
+- parallax media sections
+- full-bleed hero blocks
+- embedded video
+- custom stat dashboards
+
+## 1. Start with File + Frontmatter
+
+Create a file:
+
+`content/your-post-slug.mdx`
+
+Use this frontmatter:
+
+```mdx
 ---
-title: "Your Blog Title"
+title: "Your Post Title"
 publishedAt: "2026-02-16"
-summary: "A brief summary of your post."
+summary: "One clear sentence about the value of this post."
+layout: "standard"
 ---
 ```
 
-## Writing Content
+## 2. Write Strong Core Content First
 
-You can write content in standard Markdown format:
+Use normal Markdown/MDX for the narrative:
 
-- **Bold text** with `**text**`
-- *Italic text* with `*text*`
-- [Links](https://example.com)
-- Code blocks with triple backticks
+```mdx
+## The Problem
 
-## Code Highlighting
+Explain what is broken or painful.
 
-The blog supports syntax highlighting for code blocks:
+## The Approach
 
-```javascript
-function hello() {
-  console.log("Hello, World!");
+Explain your reasoning and tradeoffs.
+
+## The Result
+
+Show outputs, data, and what changed.
+```
+
+## 3. Use Rich Building Blocks
+
+### A. Highlighted Code Blocks
+
+````mdx
+```ts
+export async function shipFeature() {
+  const result = await deploy();
+  return result.status;
 }
 ```
+````
 
-```python
-def hello():
-    print("Hello, World!")
+### B. Annotated Code (line guidance)
+
+````mdx
+```ts {2: Call the API}{4: Handle network failure}
+const response = await fetch("/api/run");
+const data = await response.json();
+if (!response.ok) {
+  throw new Error("Request failed");
+}
+```
+````
+
+### C. Callouts
+
+```mdx
+<Callout type="info">
+Use this when you want to add context without breaking flow.
+</Callout>
 ```
 
-## Adding Images
+Supported `type` values:
+- `default`
+- `info`
+- `success`
+- `warning`
+- `error`
 
-Add images using standard Markdown:
+### D. Pull Quotes
 
-![Alt text](https://example.com/image.jpg)
+```mdx
+<PullQuote attribution="From my deployment notes">
+The biggest speed boost came from reducing feedback loops, not from writing faster code.
+</PullQuote>
+```
 
-## Creating Lists
+### E. Animated Numbers + Stat Grid
 
-### Ordered Lists
+```mdx
+<StatGrid>
+  <StatItem
+    label="Build Time"
+    value={<AnimatedStat from={0} to={42} unit="s" />}
+    detail="After optimization"
+  />
+  <StatItem
+    label="PRs Merged"
+    value={<AnimatedStat from={0} to={18} />}
+    detail="Last 14 days"
+  />
+  <StatItem
+    label="Test Pass Rate"
+    value={<AnimatedStat from={0} to={99} unit="%" />}
+    detail="CI stability"
+  />
+</StatGrid>
+```
 
-1. First item
-2. Second item
-3. Third item
+### F. Before/After Visual Comparison
 
-### Unordered Lists
+```mdx
+<ImageScrubber
+  before="/blog/refactor-before.png"
+  after="/blog/refactor-after.png"
+  beforeLabel="Before"
+  afterLabel="After"
+/>
+```
 
-- Item one
-- Item two
-- Item three
+### G. Parallax Visual Section
 
-## Blockquotes
+```mdx
+<ParallaxImage
+  src="/blog/architecture-map.png"
+  alt="System architecture overview"
+  height={460}
+/>
+```
 
-> This is a blockquote. You can use it to highlight important quotes or callouts.
+### H. Rounded Image
 
-## Tables
+```mdx
+<RoundedImage
+  src="/blog/release-dashboard.png"
+  alt="Release dashboard"
+  width={1400}
+  height={900}
+/>
+```
 
-| Column 1 | Column 2 | Column 3 |
-|----------|----------|----------|
-| Cell 1   | Cell 2   | Cell 3   |
-| Cell 4   | Cell 5   | Cell 6   |
+### I. Inline Video
 
-## What's Next
+```mdx
+<Video src="/blog/demo-flow.mp4" caption="End-to-end publishing demo" />
+```
 
-The blog infrastructure is set up. You can now:
+### J. Section Framing + Dividers
 
-1. Create new `.mdx` files in the `content/` directory
-2. Write your content in Markdown
-3. Deploy and share with the world!
+```mdx
+<SectionHeader
+  kicker="Deep Dive"
+  title="How the pipeline works"
+  description="From draft to production deployment in one branch."
+/>
 
-Happy writing! ✍️
+<ArrowDivider label="NEXT" />
+```
+
+### K. Full-bleed Layout Block
+
+```mdx
+<FullBleed>
+  <RoundedImage
+    src="/blog/full-width-visual.png"
+    alt="Full width visual"
+    width={1600}
+    height={900}
+  />
+</FullBleed>
+```
+
+### L. Hero Components
+
+```mdx
+<PostHero
+  eyebrow="Playbook"
+  title="Shipping interactive writing with MDX"
+  subtitle="A repeatable flow for content-first publishing."
+/>
+```
+
+## 4. Image and Asset Rules
+
+- Put images/videos in `public/` (example: `public/blog/my-image.png`).
+- Refer to them in MDX as `/blog/my-image.png`.
+- If using external images with `RoundedImage`, the host must be allowed in `next.config.mjs`.
+
+## 5. Writing Style That Works Well
+
+- Start with a clear promise in the first 3 lines.
+- Keep sections short and scannable.
+- Add one concrete example per major claim.
+- Prefer data over adjectives.
+- End with a reusable checklist or template.
+
+## 6. Copy-Paste Post Template
+
+````mdx
+---
+title: "Your Title"
+publishedAt: "2026-02-16"
+summary: "One-sentence summary."
+layout: "standard"
+---
+
+# Your Title
+
+## Why this matters
+
+State the problem in plain language.
+
+<Callout type="info">
+Optional context block for assumptions and constraints.
+</Callout>
+
+## The implementation
+
+```ts
+// Add your implementation snippet
+```
+
+<SectionHeader
+  kicker="Results"
+  title="What changed"
+  description="Concrete outcomes and metrics."
+/>
+
+<StatGrid>
+  <StatItem label="Metric A" value={<AnimatedStat from={0} to={12} />} />
+  <StatItem label="Metric B" value={<AnimatedStat from={0} to={87} unit="%" />} />
+  <StatItem label="Metric C" value={<AnimatedStat from={0} to={3} unit="x" />} />
+</StatGrid>
+
+## Final thoughts
+
+Your conclusion and next steps.
+````
+
+## 7. Publish in 4 Commands
+
+```bash
+git add content/your-post-slug.mdx
+git commit -m "Add blog post: your short title"
+git push
+```
+
+That is enough for Vercel auto-deploy.
+
+## 8. Common Failure Modes
+
+- Missing `---` in frontmatter
+- Invalid `publishedAt` format
+- Bad MDX syntax (unclosed tags/code fences)
+- Wrong media path (file not in `public/`)
+- Using a custom component name that is misspelled
+
+## 9. Quality Checklist Before Push
+
+Run this mental checklist:
+
+- Does the title promise specific value?
+- Is the summary clear on the blog listing page?
+- Is every section adding new information?
+- Are visuals tied to a specific insight?
+- Did you include one practical takeaway?
+
+If yes, ship it.
+
+Based on the blog by anthropic: https://www.anthropic.com/engineering/building-effective-agents
