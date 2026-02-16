@@ -1,5 +1,8 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 interface Props {
@@ -63,6 +66,6 @@ export function HackathonCard({
           ))}
         </div>
       )}
-    </li>
+    </motion.li>
   );
 }

@@ -31,10 +31,14 @@ function parseAnnotations(meta?: string): { line: number; content: string }[] {
   return annotations;
 }
 
-export const CodeBlock = ({ children, className, ...props }: React.ComponentPropsWithoutRef<"pre">) => {
+type PreProps = React.ComponentPropsWithoutRef<"pre"> & {
+  "data-meta"?: string;
+};
+
+export const CodeBlock = ({ children, className, ...props }: PreProps) => {
   const preRef = useRef<HTMLPreElement>(null);
   const rawCode = preRef.current?.textContent || "";
-  const meta = props['data-meta'] as string | undefined; // Assuming rehype-pretty-code adds this
+  const meta = props["data-meta"]; // Added by rehype-pretty-code
 
   // Check if there are annotations in the meta string
   const annotations = parseAnnotations(meta);

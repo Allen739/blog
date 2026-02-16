@@ -1,47 +1,67 @@
-<div align="center">
-<img alt="Portfolio" src="https://github.com/dillionverma/portfolio/assets/16860528/57ffca81-3f0a-4425-b31d-094f61725455" width="90%">
-</div>
+# Joseph Portfolio + Blog
 
-# Portfolio [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdillionverma%2Fportfolio)
+Personal portfolio and blog built with Next.js 14, TypeScript, Tailwind CSS, and MDX.
 
-Built with next.js, [shadcn/ui](https://ui.shadcn.com/), and [magic ui](https://magicui.design/), deployed on Vercel.
+## Stack
 
-# Features
+- Next.js 14 (App Router)
+- React 18 + TypeScript
+- Tailwind CSS + shadcn/ui components
+- MDX blog content from `content/*.mdx`
 
-- Setup only takes a few minutes by editing the [single config file](./src/data/resume.tsx)
-- Built using Next.js 14, React, Typescript, Shadcn/UI, TailwindCSS, Framer Motion, Magic UI
-- Includes a blog
-- Responsive for different devices
-- Optimized for Next.js and Vercel
+## Local Development
 
-# Getting Started Locally
+1. Install dependencies:
 
-1. Clone this repository to your local machine:
+```bash
+pnpm install
+```
 
-   ```bash
-   git clone https://github.com/dillionverma/portfolio
-   ```
+2. Start development server:
 
-2. Move to the cloned directory
+```bash
+pnpm dev
+```
 
-   ```bash
-   cd portfolio
-   ```
+3. Open `http://localhost:3000`
 
-3. Install dependencies:
+## Content Updates
 
-   ```bash
-   pnpm install
-   ```
+- Profile and social links: `src/data/resume.tsx`
+- Blog posts: `content/*.mdx`
+- Blog routes:
+  - Index: `src/app/blog/page.tsx`
+  - Post page: `src/app/blog/[slug]/page.tsx`
 
-4. Start the local Server:
+## Deploy (Vercel)
 
-   ```bash
-   pnpm dev
-   ```
+1. Push this repository to GitHub.
+2. In Vercel, click **Add New Project** and import the repo.
+3. Use default detected settings for Next.js:
+   - Build Command: `pnpm build` (or `npm run build`)
+   - Install Command: `pnpm install` (or `npm install`)
+4. Deploy.
 
-5. Open the [Config file](./src/data/resume.tsx) and make changes
+## Deploy (Self-Hosted Node)
 
-# License
+```bash
+pnpm install
+pnpm build
+pnpm start
+```
 
-Licensed under the [MIT license](https://github.com/dillionverma/portfolio/blob/main/LICENSE.md).
+Runs on port `3000` by default.
+
+## Pre-Deploy Checklist
+
+- Update personal info and links in `src/data/resume.tsx`
+- Confirm latest blog content in `content/`
+- Run:
+
+```bash
+pnpm build
+```
+
+## License
+
+MIT. See `LICENSE`.

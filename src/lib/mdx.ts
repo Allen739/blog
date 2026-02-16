@@ -1,6 +1,11 @@
-import type { Element } from "hast";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
+
+type CodeLineNode = {
+  properties: {
+    className?: string[];
+  };
+};
 
 export const mdxOptions = {
   mdxOptions: {
@@ -10,14 +15,14 @@ export const mdxOptions = {
         rehypePrettyCode,
         {
           theme: "min-dark",
-          onVisitLine(node: Element) {
+          onVisitLine(node: CodeLineNode) {
             // Add a class for line-based observers (used by annotated code).
             node.properties.className = node.properties.className || [];
             node.properties.className.push("code-line");
           },
         },
       ],
-    ],
-    format: "mdx",
+    ] as any,
+    format: "mdx" as const,
   },
 };
