@@ -3,6 +3,7 @@ import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DATA } from "@/data/resume";
 import { getBlogPosts } from "@/data/blog";
+import { compareDateStringsDesc, formatDateShort } from "@/lib/utils";
 import Link from "next/link";
 
 const BLUR_FADE_DELAY = 0.04;
@@ -10,12 +11,9 @@ const BLUR_FADE_DELAY = 0.04;
 export default async function Page() {
   const posts = await getBlogPosts();
   const recentPosts = posts
-    .sort((a, b) => {
-      if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-        return -1;
-      }
-      return 1;
-    })
+    .sort((a, b) =>
+      compareDateStringsDesc(a.metadata.publishedAt, b.metadata.publishedAt),
+    )
     .slice(0, 5);
 
   return (
@@ -65,11 +63,7 @@ export default async function Page() {
                     {post.metadata.title}
                   </span>
                   <span className="text-xs text-muted-foreground shrink-0">
-                    {new Date(post.metadata.publishedAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
+                    {formatDateShort(post.metadata.publishedAt)}
                   </span>
                 </div>
               </Link>
