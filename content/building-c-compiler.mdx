@@ -1,0 +1,89 @@
+---
+title: "Building a C Compiler with a Team of Parallel Claudes"
+publishedAt: "2026-02-16"
+summary: "We tasked Opus 4.6 using agent teams to build a C Compiler from scratch. Here's what it taught us about the future of autonomous software development."
+---
+
+# Building a C Compiler with a Team of Parallel Claudes
+
+*Written by Nicholas Carlini, a researcher on Anthropic's Safeguards team.*
+
+I've been experimenting with a new approach to supervising language models that we're calling **"agent teams."** With agent teams, multiple Claude instances work in parallel on a shared codebase without active human intervention. This approach dramatically expands the scope of what's achievable with LLM agents.
+
+To stress test it, I tasked 16 agents with writing a Rust-based C compiler, from scratch, capable of compiling the Linux kernel. Over nearly **2,000 Claude Code sessions** and **$20,000** in API costs, the agent team produced a **100,000-line compiler** that can build Linux 6.9 on x86, ARM, and RISC-V.
+
+## Enabling Long-Running Claudes
+
+Existing agent scaffolds like Claude Code require an operator to be online and available to work jointly. If you ask for a solution to a long and complex problem, the model may solve part of it, but eventually it will stop and wait for continued input—a question, a status update, or a request for clarification.
+
+To elicit sustained, autonomous progress, I built a harness that sticks Claude in a simple loop:
+
+```bash
+#!/bin/bash
+
+while true; do
+    COMMIT=$(git rev-parse --short=6 HEAD)
+    LOGFILE="agent_logs/agent_${COMMIT}.log"
+
+    claude --dangerously-skip-permissions \
+           -p "$(cat AGENT_PROMPT.md)" \
+           --model claude-opus-X-Y &> "$LOGFILE"
+done
+```
+
+## Running Claude in Parallel
+
+Running multiple instances in parallel can address two weaknesses of a single-agent harness:
+
+- **One Claude Code session can only do one thing at a time.** Especially as the scope of a project expands, debugging multiple issues in parallel is far more efficient.
+- **Running multiple Claude agents allows for specialization.** While a few agents are tasked to solve the actual problem, other specialized agents can maintain documentation, keep an eye on code quality, or solve specialized sub-tasks.
+
+To prevent two agents from trying to solve the same problem at the same time, the harness uses a simple synchronization algorithm:
+
+1. **Take a "lock"** on a task by writing a text file to `current_tasks/`
+2. **Work on the task**, then pull from upstream, merge changes, push, and remove the lock
+3. **Spawn a new Claude** in a fresh container, and repeat
+
+## Key Lessons
+
+The scaffolding runs Claude in a loop, but that loop is only useful if Claude can tell how to make progress. Most of my effort went into designing the environment around Claude:
+
+### Write extremely high-quality tests
+
+Claude will work autonomously to solve whatever problem I give it. So it's important that the task verifier is nearly perfect, otherwise Claude will solve the wrong problem.
+
+### Put yourself in Claude's shoes
+
+I had to constantly remind myself that I was writing this test harness for Claude and not for myself. Each agent is dropped into a fresh container with no context and will spend significant time orienting itself.
+
+### Make parallelism easy
+
+When there are many distinct failing tests, parallelization is trivial: each agent picks a different failing test to work on.
+
+## Evaluation Results
+
+Over nearly **2,000 Claude Code sessions** across two weeks, Opus 4.6 consumed:
+
+- **2 billion** input tokens
+- **140 million** output tokens
+- Total cost: **just under $20,000**
+
+The 100,000-line compiler can:
+- ✅ Build a bootable Linux 6.9 on x86, ARM, and RISC-V
+- ✅ Compile QEMU, FFmpeg, SQLite, PostgreSQL, Redis
+- ✅ Pass 99% pass rate on GCC torture test suite
+- ✅ Compile and run **Doom**
+
+## Looking Forward
+
+Each generation of language models opens up new ways of working with them. Early models were useful for tab-completion in IDEs. Before long, models could complete a function body from its docstring. The launch of Claude Code brought agents into the mainstream.
+
+Agent teams show the possibility of implementing entire, complex projects autonomously. This allows us, as users of these tools, to become more ambitious with our goals.
+
+We are still early, and fully autonomous development comes with real risks. Building this compiler has been some of the most fun I've had recently, but I did not expect this to be anywhere near possible so early in 2026.
+
+---
+
+*The [source code for the compiler is available](https://github.com/anthropics/claudes-c-compiler).*
+
+*Based on the original article from [Anthropic](https://www.anthropic.com/engineering/building-c-compiler).*

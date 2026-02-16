@@ -1,0 +1,58 @@
+---
+title: "Claude AI Powers NASA's First AI-Planned Mars Rover Drive"
+publishedAt: "2026-02-16"
+summary: "For the first time ever, AI has planned a route for a Mars rover. Discover how Claude helped NASA navigate 400 meters on the Red Planet."
+layout: "standard"
+---
+
+# Claude AI Powers NASA's First AI-Planned Mars Rover Drive
+
+For the first time ever, an AI model wrote the commands that guided Perseverance through a rocky field on Mars.
+
+## Mission Brief
+
+Exploring new planets means working with delay. It takes about twenty minutes for a signal to reach a Mars rover from Earth. By the time a new instruction arrives, the rover has already acted on the previous one.
+
+On December 8 and 10, 2025, the commands sent to NASA's Perseverance Rover were written by AI for the first time.
+
+Engineers at NASA's [Jet Propulsion Laboratory](https://www.jpl.nasa.gov/) (JPL) used Anthropic's Claude to plot a route for Perseverance across an approximately 400 meter path through rocky terrain.
+
+## The Challenge: Driving on Mars
+
+Perseverance has been active on Mars since it landed in February 2021. Its mission includes studying geology and climate history, collecting samples, and helping prepare for future human exploration.
+
+Driving on Mars is difficult. Every drive must be carefully planned to avoid sliding, tipping, spinning wheels, or getting stuck. Since landing, operators have manually laid out waypoints using orbital and rover imagery.
+
+This is high-stakes work. In 2009, the [Spirit](https://science.nasa.gov/mission/mer-spirit/) rover became trapped and never moved again.
+
+Perseverance has an [AutoNav](https://science.nasa.gov/resource/autonav-drives-perseverance-forward/) system to steer around obstacles between waypoints, but it cannot plan far ahead on its own.
+
+## How Claude Did It
+
+JPL engineers tested whether Claude could reduce route-planning workload while matching human-level accuracy. They used [Claude Code](https://claude.com/product/claude-code) to assist with waypoint planning.
+
+Claude needed context before it could produce useful plans. Engineers provided historical rover-driving data and operational guidance. With that context, Claude generated commands in **Rover Markup Language**, an XML-based language developed for earlier Mars missions.
+
+Using overhead imagery, Claude planned a breadcrumb route point by point for sol 1707 and sol 1709 (Martian days roughly matching December 8 and 10 on Earth). It created ten-meter segments and iterated on waypoint quality through self-review.
+
+As with all AI-assisted outputs, the team validated results carefully. Claude's waypoints were tested in Perseverance's simulation workflow, modeling more than 500,000 variables to predict position and hazards.
+
+Engineers reported that only minor edits were needed. The final plan was sent to Mars, and the rover successfully completed the route.
+
+They estimate this workflow can cut route-planning time in half and improve consistency.
+
+## Looking Ahead
+
+Claude's role in the Perseverance mission is an early test of how AI might support future missions.
+
+Capabilities such as understanding unfamiliar conditions, generating operational code, and making decisions with limited supervision are directly relevant for longer missions where communication delays are even worse.
+
+NASA's Artemis program aims to return humans to the Moon and build long-term capability near the lunar south pole. Autonomous AI systems could also support deep-space robotic missions where delays are measured in hours.
+
+Challenges will grow with distance: weaker solar power, longer communication delays, harsher environments, and shorter mission lifetimes for robotic hardware.
+
+The four-hundred meter Mars drive is an early indicator that autonomous systems may eventually help explorers make fast, adaptive decisions without waiting for human input.
+
+---
+
+*Based on the original article from [Anthropic](https://www.anthropic.com/features/claude-on-mars).*
