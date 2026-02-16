@@ -75,10 +75,16 @@ export function CustomLink({ href, children, ...props }: React.AnchorHTMLAttribu
   }
   if (href?.startsWith("#")) {
     return (
-      <a {...props} />
+      <a href={href} {...props}>
+        {children}
+      </a>
     );
   }
-  return <a target="_blank" rel="noopener noreferrer" href={href} {...props} />;
+  return (
+    <a target="_blank" rel="noopener noreferrer" href={href} {...props}>
+      {children}
+    </a>
+  );
 }
 
 export function RoundedImage({ src, alt, width, height, ...props }: React.ImgHTMLAttributes<HTMLImageElement> & { src?: string }) {
