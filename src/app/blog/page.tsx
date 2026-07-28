@@ -27,7 +27,7 @@ export default async function BlogPage() {
         <div className="space-y-1">
           {posts
             .sort((a, b) =>
-              compareDateStringsDesc(a.metadata.publishedAt, b.metadata.publishedAt),
+              compareDateStringsDesc(a.metadata.last_updated, b.metadata.last_updated),
             )
             .map((post) => (
               <Link
@@ -40,7 +40,7 @@ export default async function BlogPage() {
                     {post.metadata.title}
                   </span>
                   <span className="text-xs text-muted-foreground shrink-0">
-                    {formatDateShort(post.metadata.publishedAt)}
+                    {formatDateShort(post.metadata.last_updated)}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1 line-clamp-2">

@@ -12,7 +12,7 @@ export default async function Page() {
   const posts = await getBlogPosts();
   const recentPosts = posts
     .sort((a, b) =>
-      compareDateStringsDesc(a.metadata.publishedAt, b.metadata.publishedAt),
+      compareDateStringsDesc(a.metadata.last_updated, b.metadata.last_updated),
     )
     .slice(0, 5);
 
@@ -59,11 +59,11 @@ export default async function Page() {
                 className="group block"
               >
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
-                  <span className="text-base font-medium group-hover:underline decoration-1 underline-offset-4 transition-all">
+                  <span className="text-base font-medium underline decoration-1 underline-offset-4 transition-all">
                     {post.metadata.title}
                   </span>
                   <span className="text-xs text-muted-foreground shrink-0">
-                    {formatDateShort(post.metadata.publishedAt)}
+                    {formatDateShort(post.metadata.last_updated)}
                   </span>
                 </div>
               </Link>

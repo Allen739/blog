@@ -4,7 +4,7 @@ import path from "path";
 
 type Metadata = {
   title: string;
-  publishedAt: string;
+  last_updated: string;
   summary: string;
   image?: string;
   layout?: "feature" | "standard";

@@ -17,15 +17,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata | undefined> {
-  let post = await getPost(params.slug);
+  const { slug } = await params;
+  let post = await getPost(slug);
 
   let {
     title,
-    publishedAt: publishedTime,
+    last_updated: publishedTime,
     summary: description,
     image,
   } = post.metadata;
@@ -58,11 +57,10 @@ export async function generateMetadata({
 export default async function Blog({
   params,
 }: {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }) {
-  let post = await getPost(params.slug);
+  const { slug } = await params;
+  let post = await getPost(slug);
 
   if (!post) {
     notFound();
@@ -102,8 +100,8 @@ export default async function Blog({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.metadata.title,
-            datePublished: post.metadata.publishedAt,
-            dateModified: post.metadata.publishedAt,
+            datePublished: post.metadata.last_updated,
+            dateModified: post.metadata.last_updated,
             description: post.metadata.summary,
             image: post.metadata.image
               ? `${DATA.url}${post.metadata.image}`
@@ -119,21 +117,21 @@ export default async function Blog({
       <Link
         href="/blog"
         aria-label="Back to all posts"
-        className="absolute -left-6 top-1 inline-flex text-sm text-muted-foreground hover:text-foreground sm:-left-7"
+        className="absolute -left-10 -top-10 inline-flex text-2xl text-muted-foreground hover:text-foreground sm:-left-12"
       >
         <span aria-hidden>←</span>
       </Link>
-      <h1 className="title font-medium text-2xl tracking-tighter">
+      <h1 className="title font-bold text-4xl tracking-tighter">
         {post.metadata.title}
       </h1>
-      <div className="text-sm mb-6">
+      <div className="text-sm mb-4">
         <Suspense fallback={<p className="h-5" />}>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {formatDate(post.metadata.publishedAt)}
+            {formatDate(post.metadata.last_updated)}
           </p>
         </Suspense>
       </div>
-      <article className="prose dark:prose-invert max-w-none prose-h2:text-[1.2rem] prose-h3:text-[1.05rem] prose-h4:text-[0.98rem]">
+      <article className="prose dark:prose-invert max-w-none prose-h1:text-[1.35rem] prose-h1:font-semibold prose-h1:mt-6 prose-h1:mb-1 prose-h2:text-[1.2rem] prose-h3:text-[1.05rem] prose-h4:text-[0.98rem] prose-p:my-1 prose-p:leading-relaxed prose-hr:my-4 prose-blockquote:my-2">
         <MDXRemote
           source={renderedContent}
           components={mdxComponents}
