@@ -1,5 +1,5 @@
 import { getBlogPosts, getPost } from "@/data/blog";
-import { DATA } from "@/data/resume";
+import { DATA } from "@/data/site";
 import { formatDate } from "@/lib/utils";
 import { mdxOptions } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";

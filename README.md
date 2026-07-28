@@ -1,67 +1,60 @@
-# Joseph Portfolio + Blog
+# joseph.nd
 
-Personal portfolio and blog built with Next.js 14, TypeScript, Tailwind CSS, and MDX.
+Personal blog and portfolio. Built with Next.js 16, Tailwind CSS v4, and MDX.
 
 ## Stack
 
-- Next.js 14 (App Router)
-- React 18 + TypeScript
-- Tailwind CSS + shadcn/ui components
-- MDX blog content from `content/*.mdx`
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript 7
+- **Styling**: Tailwind CSS v4 (via `@theme` in globals.css)
+- **Fonts**: Inter (sans) + Noto Sans JP (japanese accent)
+- **Content**: MDX via `next-mdx-remote`, stored in `content/*.mdx`
+- **Code highlighting**: `rehype-pretty-code` (min-dark theme)
+- **Animations**: framer-motion
+- **Package manager**: pnpm
 
-## Local Development
-
-1. Install dependencies:
+## Local development
 
 ```bash
 pnpm install
-```
-
-2. Start development server:
-
-```bash
 pnpm dev
 ```
 
-3. Open `http://localhost:3000`
+Open `http://localhost:3000`.
 
-## Content Updates
+## Project structure
 
-- Profile and social links: `src/data/resume.tsx`
-- Blog posts: `content/*.mdx`
-- Blog routes:
-  - Index: `src/app/blog/page.tsx`
-  - Post page: `src/app/blog/[slug]/page.tsx`
-
-## Deploy (Vercel)
-
-1. Push this repository to GitHub.
-2. In Vercel, click **Add New Project** and import the repo.
-3. Use default detected settings for Next.js:
-   - Build Command: `pnpm build` (or `npm run build`)
-   - Install Command: `pnpm install` (or `npm install`)
-4. Deploy.
-
-## Deploy (Self-Hosted Node)
-
-```bash
-pnpm install
-pnpm build
-pnpm start
+```
+content/*.mdx              ← blog posts (one file = one post)
+public/me.jpeg             ← static assets (images, files)
+src/
+  app/                     ← Next.js App Router pages
+  components/              ← UI components
+  data/
+    site.tsx               ← profile, nav links, socials, current state
+    blog.ts                ← MDX reader and post loader
+  lib/
+    mdx.ts                 ← remark/rehype plugin config
+    utils.ts               ← date formatting helpers
+docs/publishing.md         ← full guide for writing & publishing
 ```
 
-Runs on port `3000` by default.
+## Content publishing
 
-## Pre-Deploy Checklist
+Only `content/*.mdx` needs to be touched for new posts. See [`docs/publishing.md`](docs/publishing.md) for the full guide — frontmatter, dates, images, videos, code blocks, and more.
 
-- Update personal info and links in `src/data/resume.tsx`
-- Confirm latest blog content in `content/`
-- Run:
+## Profile & config
+
+Edit `src/data/site.tsx`:
+
+- Name, description, avatar
+- Navbar links and socials
+- Current state items (mood, building, listening, reading)
+
+## Deploy
+
+Push to GitHub. Vercel auto-deploys with default Next.js settings.
 
 ```bash
-pnpm build
+git push
 ```
-
-## License
-
-MIT. See `LICENSE`.

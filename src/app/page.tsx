@@ -1,7 +1,7 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DATA } from "@/data/resume";
+import { DATA } from "@/data/site";
 import { getBlogPosts } from "@/data/blog";
 import { compareDateStringsDesc, formatDateShort } from "@/lib/utils";
 import Link from "next/link";
@@ -24,7 +24,7 @@ export default async function Page() {
             <div className="flex-col flex flex-1 space-y-1.5">
               <BlurFadeText
                 delay={BLUR_FADE_DELAY}
-                className="text-3xl font-japanese tracking-tighter sm:text-5xl xl:text-6xl/none"
+                className="text-xl font-japanese tracking-tighter sm:text-3xl xl:text-4xl/none"
                 yOffset={8}
                 text={`Hi, I'm ${DATA.name.split(" ")[0]}`}
               />
