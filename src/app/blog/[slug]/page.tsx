@@ -116,9 +116,16 @@ export default async function Blog({
       <Link
         href="/blog"
         aria-label="Back to all posts"
-        className="absolute -left-10 -top-10 inline-flex text-2xl text-muted-foreground hover:text-foreground sm:-left-12"
+        className="hidden sm:absolute sm:-left-12 sm:-top-10 sm:inline-flex text-2xl text-muted-foreground hover:text-foreground"
       >
         <span aria-hidden>←</span>
+      </Link>
+      <Link
+        href="/blog"
+        aria-label="Back to all posts"
+        className="sm:hidden inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-2"
+      >
+        <span aria-hidden>←</span> back
       </Link>
       <h1 className="title font-bold text-4xl tracking-tighter">
         {post.metadata.title}
