@@ -7,7 +7,7 @@ export const DATA = {
   url: "https://joseph-ndonje.vercel.app",
   description:
     "Software Engineer and an aspiring Entrepreneur. I love building things and watching anime. AI is all i can think of.",
-  avatarUrl: "/me.jpg",
+  avatarUrl: "/me.jpeg",
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
     { href: "/blog", icon: NotebookIcon, label: "Blog" },

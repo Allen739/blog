@@ -1,7 +1,6 @@
 import { getBlogPosts, getPost } from "@/data/blog";
 import { DATA } from "@/data/resume";
 import { formatDate } from "@/lib/utils";
-import { mdxComponents } from "@/components/mdx-components";
 import { mdxOptions } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { Metadata } from "next";
@@ -134,7 +133,6 @@ export default async function Blog({
       <article className="prose dark:prose-invert max-w-none prose-h1:text-[1.35rem] prose-h1:font-semibold prose-h1:mt-6 prose-h1:mb-1 prose-h2:text-[1.2rem] prose-h3:text-[1.05rem] prose-h4:text-[0.98rem] prose-p:my-1 prose-p:leading-relaxed prose-hr:my-4 prose-blockquote:my-2">
         <MDXRemote
           source={renderedContent}
-          components={mdxComponents}
           options={mdxOptions}
         />
       </article>

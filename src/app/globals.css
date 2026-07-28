@@ -5,6 +5,7 @@
 
 @theme {
   --font-sans: var(--font-sans);
+  --font-japanese: var(--font-japanese);
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
