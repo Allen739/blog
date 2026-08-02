@@ -1,0 +1,77 @@
+---
+title: "How GPUs Actually Work: A Warehouse of Identical Tiny Workers"
+last_updated: "2026-08-02"
+summary: "Your GPU isn't a smarter CPU. It's a kitchen with a thousand identical line cooks who can only do one step, and that's exactly why it's fast."
+---
+
+# How GPUs Actually Work: A Warehouse of Identical Tiny Workers
+
+> I am Blob. I am a very serious small black worker, and I live inside your GPU.
+> It is not what you think. There is no giant brain in here. There is a kitchen.
+> A very big, very loud kitchen full of me.
+
+## There is no genius in here
+
+When people hear "GPU" they picture a brain. Wrong. A GPU is a warehouse of workers, and every single one of us is terrible at thinking. We are only good at one thing: doing the same small step, over and over, at the same time as everyone else.
+
+Your CPU is different. It's a chef, one extremely good chef with a tall hat, who can cook any recipe you throw at it, but only one dish at a time. We are a thousand line cooks. None of us alone can cook a full dish. But line us up and we'll slice a million onions before the chef has peeled one.
+
+![One chef with a tall hat and one pot, facing a long line of identical tiny cooks slicing the same onion.](/blog/gpu-internals/01-chef-vs-cooks.svg)
+
+*Fig 1: the chef vs the line of cooks.*
+
+## One big job, torn into a thousand tiny slips
+
+Here's the trick. When the computer wants to render a picture, it doesn't hand us one huge job. It tears the job into tiny identical slips and hands one to each of us. Every slip says the same thing: "take these numbers, do this one operation." We all do the exact same step, on different numbers.
+
+This is called a kernel. One recipe. A million cooks.
+
+![A worker ripping one large sheet labeled "1 big job" into small identical slips that fly to four other tiny workers catching them.](/blog/gpu-internals/02-tear-job-into-slips.svg)
+
+*Fig 2: one recipe, a million cooks.*
+
+## We march in lockstep
+
+We don't work alone; we march in squads of 32. That's a warp. All 32 of us lift our feet at the same time, taking the same step. The chip reads one instruction and feeds it to all of us at once. Same instruction, 32 sets of data.
+
+The problem: if one of us hits a fork in the road (say, "if this pixel is blue, do A; else do B"), the squad has to split. The 32 of us do A together, march back, then do B together. And if one of us stumbles? Everyone halts until they get up.
+
+This is called divergence, and it's why GPU programmers whisper prayers about writing fewer `if` statements.
+
+![A squad of tiny workers marching in lockstep behind a leader; the last one has tripped and everyone has stopped.](/blog/gpu-internals/03-lockstep-warp.svg)
+
+*Fig 3: 32 threads, one step at a time.*
+
+## The oven is slow. Never stare at it.
+
+Here's the thing nobody tells you: memory is slow. Really slow. Fetching a number from far away takes hundreds of cycles, an eternity in chip time.
+
+A chef would just wait. Stare at the oven. We don't. There are a thousand of us, so when one squad is waiting for numbers, the scheduler quietly swaps in another squad that's ready to work. While one batch bakes, we knead the next. Nobody ever stands still.
+
+The GPU hides slowness with numbers. More workers means less waiting. That's the whole game.
+
+![A worker putting a tray into a slow oven while already kneading the next batch of dough; a dashed line shows the swap between baking and kneading.](/blog/gpu-internals/04-never-stare-at-oven.svg)
+
+*Fig 4: hide the slowness, never wait.*
+
+## Where everything lives
+
+Some things are right next to us: registers, tiny pockets built into each worker. Instant. A little further: shared memory, a shelf on our workbench. Fast, and shared with our squad. Then, across the whole warehouse: global memory, the big store. Gigabytes of it, but you have to run across town to fetch it.
+
+Every time I run to the warehouse, I lose a hundred steps. So the smart workers keep everything close. Proximity is performance.
+
+![A worker at a desk with a shared shelf nearby, running across a long path to a distant warehouse door marked "global memory".](/blog/gpu-internals/05-memory-warehouse.svg)
+
+*Fig 5: registers, shared memory, and the warehouse across town.*
+
+## Why this matters
+
+You might wonder why anyone built a warehouse full of identical workers instead of hiring more chefs. Because some jobs aren't one clever dish; they're a million identical steps. Drawing 4K pixels. Training a neural network. Simulating the physics of a falling teddy bear.
+
+For those jobs, the chef is useless. You need a wall, built one identical brick at a time, by a million hands that never stop.
+
+![A worker laying identical bricks into a tall wall while a chef in the corner still cooks a single pot.](/blog/gpu-internals/06-wall-of-bricks.svg)
+
+*Fig 6: boring, identical, and unstoppable.*
+
+That's the GPU. Not a brain. A wall. And if you ever wonder why your fans spin up so loud, that's us. A thousand tiny workers, marching in lockstep, never once standing still.
