@@ -46,7 +46,7 @@ export default async function Page() {
 
       <section id="recent-blogs">
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
-          <h2 className="text-xl font-bold mb-4">Recent Blog Posts</h2>
+          <h2 className="text-xl font-bold mb-4">Recent Posts</h2>
         </BlurFade>
         <div className="space-y-3">
           {recentPosts.map((post, id) => (

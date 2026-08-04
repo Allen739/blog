@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#ffffff"/>
+  <defs>
+    <g id="xh">
+      <path d="M0,-30 C12,-34 26,-24 28,-8 C30,6 24,22 12,28 C0,33 -14,31 -24,22 C-34,12 -34,-6 -26,-18 C-18,-30 -8,-32 0,-30Z" fill="#1a1a1a"/>
+      <circle cx="-9" cy="-7" r="3" fill="#ffffff"/>
+      <circle cx="9" cy="-7" r="3" fill="#ffffff"/>
+      <path d="M-9,28 L-11,42 M9,28 L11,42" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <marker id="arr" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#e8862d"/>
+    </marker>
+    <marker id="arrd" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#d64545"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#3d6ea8"/>
+    </marker>
+  </defs>
+  <style>.n { font-family: "Comic Sans MS","Segoe Script","Brush Script MT",cursive; }</style>
+
+  <text x="800" y="96" text-anchor="middle" class="n" font-size="50" fill="#1a1a1a" transform="rotate(-1 800 96)">warp divergence</text>
+  <text x="800" y="144" text-anchor="middle" class="n" font-size="28" fill="#3d6ea8">all 32 threads must run the same instruction</text>
+
+  <!-- left marching group ground -->
+  <path d="M90,650 L560,650" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+  <use href="#xh" transform="translate(160,610)"/>
+  <use href="#xh" transform="translate(270,610)"/>
+  <use href="#xh" transform="translate(380,610)"/>
+  <use href="#xh" transform="translate(490,610)"/>
+  <path d="M120,658 L120,682 L530,682 L530,658" stroke="#e8862d" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="325" y="716" text-anchor="middle" class="n" font-size="26" fill="#e8862d">warp — all in lockstep</text>
+
+  <!-- arrow to fork -->
+  <path d="M560,610 L636,610" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" marker-end="url(#arr)"/>
+
+  <!-- diamond fork -->
+  <path d="M700,610 L744,560 L788,610 L744,660 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+  <text x="744" y="617" text-anchor="middle" class="n" font-size="22" fill="#1a1a1a">if?</text>
+
+  <!-- path A up -->
+  <path d="M788,570 C840,440 920,370 1010,370" stroke="#3d6ea8" stroke-width="4" fill="none" stroke-linecap="round" marker-end="url(#arrb)"/>
+  <text x="870" y="334" text-anchor="middle" class="n" font-size="30" fill="#3d6ea8" transform="rotate(-3 870 334)">branch A — runs first</text>
+  <path d="M1010,370 L1520,370" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  <use href="#xh" transform="translate(1080,330)"/>
+  <use href="#xh" transform="translate(1200,330)"/>
+  <use href="#xh" transform="translate(1320,330)"/>
+  <use href="#xh" transform="translate(1440,330)"/>
+
+  <!-- path B down -->
+  <path d="M788,650 C840,760 920,800 1010,800" stroke="#d64545" stroke-width="4" fill="none" stroke-linecap="round" marker-end="url(#arrd)"/>
+  <text x="870" y="858" text-anchor="middle" class="n" font-size="30" fill="#d64545" transform="rotate(2 870 858)">branch B — waits, then runs</text>
+  <path d="M1010,800 L1520,800" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  <use href="#xh" transform="translate(1080,760)"/>
+  <use href="#xh" transform="translate(1200,760)"/>
+  <use href="#xh" transform="translate(1320,760)"/>
+  <use href="#xh" transform="translate(1440,760)"/>
+  <text x="1080" y="710" text-anchor="middle" class="n" font-size="22" fill="#d64545">zzz</text>
+  <text x="1200" y="706" text-anchor="middle" class="n" font-size="22" fill="#d64545">zzz</text>
+  <text x="1320" y="712" text-anchor="middle" class="n" font-size="22" fill="#d64545">zzz</text>
+  <text x="1440" y="708" text-anchor="middle" class="n" font-size="22" fill="#d64545">zzz</text>
+</svg>

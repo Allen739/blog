@@ -5,19 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/site";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Inter as FontSans, Noto_Sans_JP as FontJapanese } from "next/font/google";
 import "./globals.css";
-
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const fontJapanese = FontJapanese({
-  subsets: ["latin"],
-  variable: "--font-japanese",
-  weight: ["300", "400", "700"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
@@ -64,9 +52,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6",
-          fontSans.variable,
-          fontJapanese.variable
+          "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6 pb-20 sm:pb-24",
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light">

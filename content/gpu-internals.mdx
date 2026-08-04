@@ -1,77 +1,113 @@
 ---
 title: "How GPUs Actually Work: A Warehouse of Identical Tiny Workers"
-last_updated: "2026-08-02"
-summary: "Your GPU isn't a smarter CPU. It's a kitchen with a thousand identical line cooks who can only do one step, and that's exactly why it's fast."
+last_updated: "2026-08-03"
+summary: "A GPU is not a smaller CPU. It wins by running many identical workers in lockstep and hiding memory latency with sheer volume."
 ---
 
 # How GPUs Actually Work: A Warehouse of Identical Tiny Workers
 
-> I am Blob. I am a very serious small black worker, and I live inside your GPU.
-> It is not what you think. There is no giant brain in here. There is a kitchen.
-> A very big, very loud kitchen full of me.
+> A GPU is not a genius in a box.
+> It is a huge room full of workers who can all do the same small thing very fast.
+> The trick is not intelligence. The trick is repetition.
 
-## There is no genius in here
+## The wrong mental model
 
-When people hear "GPU" they picture a brain. Wrong. A GPU is a warehouse of workers, and every single one of us is terrible at thinking. We are only good at one thing: doing the same small step, over and over, at the same time as everyone else.
+People often imagine a GPU as a tiny brain. That is the wrong image.
 
-Your CPU is different. It's a chef, one extremely good chef with a tall hat, who can cook any recipe you throw at it, but only one dish at a time. We are a thousand line cooks. None of us alone can cook a full dish. But line us up and we'll slice a million onions before the chef has peeled one.
+A CPU is a generalist. It can follow many kinds of instructions, branch constantly, and adapt to whatever strange task shows up next.
 
-![One chef with a tall hat and one pot, facing a long line of identical tiny cooks slicing the same onion.](/blog/gpu-internals/01-chef-vs-cooks.svg)
+A GPU is much less flexible and much more brutal. It is built around lots of nearly identical workers. Each worker is simple. The power comes from having many of them do the same step at the same time.
 
-*Fig 1: the chef vs the line of cooks.*
+![CPU Chef vs GPU Workers kitchen cooking analogy.](/blog/gpu-internals/01-cpu-gpu-comparison.png)
 
-## One big job, torn into a thousand tiny slips
+The useful question is not, "How smart is the GPU?"
 
-Here's the trick. When the computer wants to render a picture, it doesn't hand us one huge job. It tears the job into tiny identical slips and hands one to each of us. Every slip says the same thing: "take these numbers, do this one operation." We all do the exact same step, on different numbers.
+It is, "How many identical things can it do at once?"
 
-This is called a kernel. One recipe. A million cooks.
+## One big job becomes many small slips
 
-![A worker ripping one large sheet labeled "1 big job" into small identical slips that fly to four other tiny workers catching them.](/blog/gpu-internals/02-tear-job-into-slips.svg)
+When a GPU runs a kernel, it does not treat the whole problem as one giant mystery.
 
-*Fig 2: one recipe, a million cooks.*
+It slices the work into many tiny pieces. Each worker gets a slip with the same instruction, just on different data.
 
-## We march in lockstep
+That is why GPUs are so good at rendering pixels, multiplying matrices, and training neural networks. The work is repetitive. The instruction is simple. The data changes.
 
-We don't work alone; we march in squads of 32. That's a warp. All 32 of us lift our feet at the same time, taking the same step. The chip reads one instruction and feeds it to all of us at once. Same instruction, 32 sets of data.
+![Slicing a big job into 32 thread slips for a warp.](/blog/gpu-internals/02-job-warps.png)
 
-The problem: if one of us hits a fork in the road (say, "if this pixel is blue, do A; else do B"), the squad has to split. The 32 of us do A together, march back, then do B together. And if one of us stumbles? Everyone halts until they get up.
+The point is not elegance.
 
-This is called divergence, and it's why GPU programmers whisper prayers about writing fewer `if` statements.
+The point is scale.
 
-![A squad of tiny workers marching in lockstep behind a leader; the last one has tripped and everyone has stopped.](/blog/gpu-internals/03-lockstep-warp.svg)
+## The lockstep problem
 
-*Fig 3: 32 threads, one step at a time.*
+GPU workers usually march in groups called warps. On NVIDIA hardware, a warp is 32 threads.
 
-## The oven is slow. Never stare at it.
+That sounds efficient until one worker hits a branch:
 
-Here's the thing nobody tells you: memory is slow. Really slow. Fetching a number from far away takes hundreds of cycles, an eternity in chip time.
+```text
+if x > 0:
+    do A
+else:
+    do B
+```
 
-A chef would just wait. Stare at the oven. We don't. There are a thousand of us, so when one squad is waiting for numbers, the scheduler quietly swaps in another squad that's ready to work. While one batch bakes, we knead the next. Nobody ever stands still.
+If the threads in the same warp disagree, the GPU has to serialize the paths. Some threads do A, then the others do B. The group stops being perfectly aligned.
 
-The GPU hides slowness with numbers. More workers means less waiting. That's the whole game.
+That is divergence, and it is expensive.
 
-![A worker putting a tray into a slow oven while already kneading the next batch of dough; a dashed line shows the swap between baking and kneading.](/blog/gpu-internals/04-never-stare-at-oven.svg)
+![Warp divergence: threads split into two paths, serialized.](/blog/gpu-internals/03-warp-divergence.svg)
 
-*Fig 4: hide the slowness, never wait.*
+This is why GPU code tends to prefer simple, predictable control flow.
 
-## Where everything lives
+Less branching usually means more throughput.
 
-Some things are right next to us: registers, tiny pockets built into each worker. Instant. A little further: shared memory, a shelf on our workbench. Fast, and shared with our squad. Then, across the whole warehouse: global memory, the big store. Gigabytes of it, but you have to run across town to fetch it.
+## The real trick is hiding waiting
 
-Every time I run to the warehouse, I lose a hundred steps. So the smart workers keep everything close. Proximity is performance.
+Memory is slow.
 
-![A worker at a desk with a shared shelf nearby, running across a long path to a distant warehouse door marked "global memory".](/blog/gpu-internals/05-memory-warehouse.svg)
+Fetching data from far away takes time, and that time dominates chip execution if nothing else is ready to run.
 
-*Fig 5: registers, shared memory, and the warehouse across town.*
+The GPU response is not to wait. It is to switch.
 
-## Why this matters
+While one warp is stalled on memory, the scheduler swaps in another warp that already has work ready to go. The chip stays busy by keeping a large queue of runnable work.
 
-You might wonder why anyone built a warehouse full of identical workers instead of hiring more chefs. Because some jobs aren't one clever dish; they're a million identical steps. Drawing 4K pixels. Training a neural network. Simulating the physics of a falling teddy bear.
+![Hiding memory latency by swapping in a ready warp.](/blog/gpu-internals/04-hide-latency.svg)
 
-For those jobs, the chef is useless. You need a wall, built one identical brick at a time, by a million hands that never stop.
+This is the central trick of GPU performance:
 
-![A worker laying identical bricks into a tall wall while a chef in the corner still cooks a single pot.](/blog/gpu-internals/06-wall-of-bricks.svg)
+not less latency, but better hiding of latency.
 
-*Fig 6: boring, identical, and unstoppable.*
+## Memory is arranged by distance
 
-That's the GPU. Not a brain. A wall. And if you ever wonder why your fans spin up so loud, that's us. A thousand tiny workers, marching in lockstep, never once standing still.
+Not all memory is equal.
+
+Registers are tiny and private. Shared memory is small but close to a group of workers. Global memory is huge, but far away and expensive to touch.
+
+The good GPU programmer keeps hot data as close as possible to the worker doing the computation.
+
+![Memory hierarchy: registers, shared memory, and distant global memory.](/blog/gpu-internals/05-memory-hierarchy.svg)
+
+If you keep walking across the warehouse for every ingredient, the machine slows down.
+
+If you keep the ingredients near the workers, the machine flies.
+
+## Why GPUs win
+
+GPU-friendly workloads have one thing in common: lots of repeated, independent work.
+
+That is true for rendering, simulation, image processing, and most modern machine learning.
+
+The GPU is not winning because each worker is brilliant.
+
+It is winning because the whole system is built to keep a wall of workers moving together:
+
+![Parallel throughput: thousands of Xiaoheis laying the same brick simultaneously.](/blog/gpu-internals/06-parallel-throughput.svg)
+
+That is the whole idea.
+
+One big job.
+
+Many small workers.
+
+Very little waiting.
+

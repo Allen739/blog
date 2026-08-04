@@ -1,0 +1,110 @@
+---
+title: "How PyTorch Actually Works: Tensors, Autograd, and Modules"
+last_updated: "2026-08-04"
+summary: "PyTorch looks like normal Python, but underneath it is a tensor runtime, an autograd engine, and a parameter container driving the training loop."
+---
+
+# How PyTorch Actually Works: Tensors, Autograd, and Modules
+
+> PyTorch feels simple because the API is simple.
+> Underneath that simplicity is a runtime that keeps track of tensors, devices, gradients, and trainable state.
+
+## The surface is Python, the engine is not
+
+PyTorch lets you write ordinary Python code:
+
+```python
+y = model(x)
+loss = criterion(y, target)
+loss.backward()
+optimizer.step()
+```
+
+That makes it feel like the framework is "just Python."
+
+It is not.
+
+The Python part mostly orchestrates objects and function calls. The real work happens in tensor storage, backend kernels, and the autograd engine that records what happened.
+
+![Xiaohei pressing a Python API button connected to a C++ Engine running a Tensor Kernel.](/blog/pytorch-internals/01-python-tensor-engine.png)
+
+## Tensor is the basic unit
+
+A `Tensor` is more than a shape and a list of numbers.
+
+It also knows where its storage lives, whether that storage is on CPU or GPU, how to view the data, and what metadata should travel with it.
+
+That is why a tensor can feel like a regular value in Python, yet still map to very different execution paths under the hood.
+
+The same code can run on CPU or CUDA because the tensor carries the device choice with it.
+
+## Eager mode is immediate
+
+PyTorch is usually used in eager mode.
+
+That means operations run right away. They are not first compiled into a giant static graph before anything happens.
+
+Instead, each operation dispatches to the correct backend implementation as soon as you call it. This is why PyTorch is pleasant to debug. You can print values, inspect shapes, and step through the code in the same order you wrote it.
+
+The dispatcher decides which kernel to use. Your Python line becomes a concrete tensor operation.
+
+## Autograd records the path backward
+
+When a tensor has `requires_grad=True`, PyTorch starts remembering the chain of operations that produced it.
+
+That recorded chain is the autograd graph.
+
+During the forward pass, PyTorch stores enough information to compute derivatives later. During `backward()`, it walks that graph in reverse and pushes gradients back through each operation.
+
+![Xiaohei pulling a rope backward along the orange Forward Pass footprints to propagate gradients.](/blog/pytorch-internals/02-autograd-path.png)
+
+The important idea is that autograd is not magic.
+
+It is bookkeeping.
+
+## Modules organize state
+
+`nn.Module` gives structure to a model.
+
+It knows about submodules, parameters, buffers, and the recursive tree of everything that belongs to the model.
+
+`Parameter` is the key signal here. If a tensor is wrapped as a parameter, PyTorch treats it as trainable state and includes it in `state_dict()`, optimization, saving, and loading.
+
+![Xiaohei checking trainable states inside an nn.Module container box next to Parameters drawers.](/blog/pytorch-internals/03-module-parameters.png)
+
+This is why `model.parameters()` works.
+
+PyTorch is not scanning your code for "important numbers." It already knows which tensors are part of the model.
+
+## The optimizer only changes parameters
+
+After `backward()`, the optimizer gets a set of gradients.
+
+Its job is not to re-run the model. Its job is to update the parameters using those gradients.
+
+That is the whole training loop in one sentence:
+
+1. run forward
+2. compute loss
+3. run backward
+4. update parameters
+5. clear gradients
+
+![Xiaohei pushing updated weights down the Loss Curve to reach minimum loss.](/blog/pytorch-internals/04-optimizer-loop.png)
+
+If training feels mysterious, reduce it to those five steps.
+
+## The mental model that helps
+
+If you keep only three ideas in your head, keep these:
+
+1. tensors carry data plus device plus metadata
+2. autograd records operations so gradients can flow backward
+3. modules organize trainable state
+
+That is enough to understand most PyTorch code without treating it like a black box.
+
+PyTorch looks like normal Python on purpose.
+
+The machinery underneath is what makes that possible.
+

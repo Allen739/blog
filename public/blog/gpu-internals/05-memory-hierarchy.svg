@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#ffffff"/>
+  <defs>
+    <g id="xh">
+      <path d="M0,-30 C12,-34 26,-24 28,-8 C30,6 24,22 12,28 C0,33 -14,31 -24,22 C-34,12 -34,-6 -26,-18 C-18,-30 -8,-32 0,-30Z" fill="#1a1a1a"/>
+      <circle cx="-9" cy="-7" r="3" fill="#ffffff"/>
+      <circle cx="9" cy="-7" r="3" fill="#ffffff"/>
+      <path d="M-9,28 L-11,42 M9,28 L11,42" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <marker id="arr" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#e8862d"/>
+    </marker>
+  </defs>
+  <style>.n { font-family: "Comic Sans MS","Segoe Script","Brush Script MT",cursive; }</style>
+
+  <text x="800" y="96" text-anchor="middle" class="n" font-size="50" fill="#1a1a1a" transform="rotate(-1 800 96)">memory is arranged by distance</text>
+
+  <!-- ground -->
+  <path d="M100,700 L1520,700" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Xiaohei worker on far left -->
+  <use href="#xh" transform="translate(180,660) scale(1.3)"/>
+
+  <!-- Registers: tiny drawer right next to worker -->
+  <g transform="translate(310,630)">
+    <rect x="-36" y="-28" width="72" height="56" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+    <path d="M-24,-14 L-8,-14 M2,-14 L18,-14" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    <path d="M-24,6 L-8,6 M2,6 L18,6" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="0" cy="-4" r="5" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+  </g>
+  <!-- arm reaching to registers -->
+  <path d="M210,650 L274,648" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+  <text x="310" y="530" text-anchor="middle" class="n" font-size="30" fill="#3d6ea8" transform="rotate(-2 310 530)">registers</text>
+  <text x="310" y="568" text-anchor="middle" class="n" font-size="24" fill="#3d6ea8">~1 cycle</text>
+  <text x="310" y="600" text-anchor="middle" class="n" font-size="22" fill="#3d6ea8">right on the desk</text>
+
+  <!-- Shared memory: shelf a bit away -->
+  <g transform="translate(720,560)">
+    <path d="M-100,-80 L100,-80 L100,140 L-100,140 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+    <path d="M-100,-80 L-114,-100 L114,-100 L100,-80" fill="none" stroke="#1a1a1a" stroke-width="3"/>
+    <path d="M-100,10 L100,10 M-100,80 L100,80" stroke="#1a1a1a" stroke-width="2"/>
+    <rect x="-70" y="-60" width="44" height="54" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+    <rect x="-10" y="-60" width="44" height="54" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+    <rect x="-50" y="26" width="36" height="40" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+    <rect x="10" y="26" width="36" height="40" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+  </g>
+  <!-- dashed arrow from worker -->
+  <path d="M340,660 C480,640 580,620 614,600" stroke="#e8862d" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="12 8" marker-end="url(#arr)"/>
+  <text x="720" y="400" text-anchor="middle" class="n" font-size="30" fill="#e8862d" transform="rotate(1 720 400)">shared memory</text>
+  <text x="720" y="438" text-anchor="middle" class="n" font-size="24" fill="#e8862d">~30 cycles</text>
+  <text x="720" y="470" text-anchor="middle" class="n" font-size="22" fill="#e8862d">nearby shelf</text>
+
+  <!-- Global memory: big warehouse far away -->
+  <g transform="translate(1270,520)">
+    <path d="M-180,-140 L180,-140 L180,180 L-180,180 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+    <path d="M-180,-140 C-170,-162 -150,-162 -140,-140" fill="none" stroke="#1a1a1a" stroke-width="3"/>
+    <path d="M-60,-80 L-60,180 M60,-80 L60,180" stroke="#1a1a1a" stroke-width="3"/>
+    <circle cx="-120" cy="-60" r="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="2.5"/>
+    <circle cx="-20" cy="-60" r="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="2.5"/>
+    <circle cx="80" cy="-60" r="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="2.5"/>
+    <circle cx="-120" cy="30" r="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="2.5"/>
+    <circle cx="-20" cy="30" r="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="2.5"/>
+    <circle cx="80" cy="30" r="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="2.5"/>
+  </g>
+  <!-- dashed arrow to global -->
+  <path d="M840,640 C980,600 1060,580 1086,580" stroke="#d64545" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="12 8" marker-end="url(#arr)"/>
+  <text x="1270" y="310" text-anchor="middle" class="n" font-size="30" fill="#d64545" transform="rotate(2 1270 310)">global memory</text>
+  <text x="1270" y="348" text-anchor="middle" class="n" font-size="24" fill="#d64545">~500 cycles</text>
+  <text x="1270" y="380" text-anchor="middle" class="n" font-size="22" fill="#d64545">across town</text>
+
+  <text x="800" y="820" text-anchor="middle" class="n" font-size="30" fill="#1a1a1a" transform="rotate(-1 800 820)">keep hot data close — or pay the round trip</text>
+</svg>

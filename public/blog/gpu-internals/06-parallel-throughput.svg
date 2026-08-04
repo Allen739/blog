@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#ffffff"/>
+  <defs>
+    <g id="xh">
+      <path d="M0,-30 C12,-34 26,-24 28,-8 C30,6 24,22 12,28 C0,33 -14,31 -24,22 C-34,12 -34,-6 -26,-18 C-18,-30 -8,-32 0,-30Z" fill="#1a1a1a"/>
+      <circle cx="-9" cy="-7" r="3" fill="#ffffff"/>
+      <circle cx="9" cy="-7" r="3" fill="#ffffff"/>
+      <path d="M-9,28 L-11,42 M9,28 L11,42" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g id="brick">
+      <rect x="-50" y="-20" width="100" height="40" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+      <path d="M-36,-8 L-18,-8 M-8,-8 L10,-8 M20,-8 L38,-8" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <style>.n { font-family: "Comic Sans MS","Segoe Script","Brush Script MT",cursive; }</style>
+
+  <text x="800" y="90" text-anchor="middle" class="n" font-size="50" fill="#1a1a1a" transform="rotate(-1 800 90)">same brick. boring. wins.</text>
+  <text x="800" y="138" text-anchor="middle" class="n" font-size="28" fill="#3d6ea8">a million hands, one identical operation</text>
+
+  <!-- ground -->
+  <path d="M100,730 L1520,730" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Wall of bricks being built: 3 rows x 5 cols -->
+  <!-- row 3 (top) -->
+  <use href="#brick" transform="translate(700,550)"/>
+  <use href="#brick" transform="translate(820,550)"/>
+  <use href="#brick" transform="translate(940,550)"/>
+  <use href="#brick" transform="translate(1060,550)"/>
+  <!-- row 2 -->
+  <use href="#brick" transform="translate(640,596)"/>
+  <use href="#brick" transform="translate(760,596)"/>
+  <use href="#brick" transform="translate(880,596)"/>
+  <use href="#brick" transform="translate(1000,596)"/>
+  <use href="#brick" transform="translate(1120,596)"/>
+  <!-- row 1 (bottom) -->
+  <use href="#brick" transform="translate(640,642)"/>
+  <use href="#brick" transform="translate(760,642)"/>
+  <use href="#brick" transform="translate(880,642)"/>
+  <use href="#brick" transform="translate(1000,642)"/>
+  <use href="#brick" transform="translate(1120,642)"/>
+
+  <!-- row of Xiaoheis laying bricks (one per column) -->
+  <use href="#xh" transform="translate(640,692)"/>
+  <use href="#xh" transform="translate(760,692)"/>
+  <use href="#xh" transform="translate(880,692)"/>
+  <use href="#xh" transform="translate(1000,692)"/>
+  <use href="#xh" transform="translate(1120,692)"/>
+
+  <!-- each carries a brick -->
+  <g transform="translate(640,654) rotate(-6)"><use href="#brick" transform="scale(0.6)"/></g>
+  <g transform="translate(760,654) rotate(5)"><use href="#brick" transform="scale(0.6)"/></g>
+  <g transform="translate(880,652) rotate(-4)"><use href="#brick" transform="scale(0.6)"/></g>
+  <g transform="translate(1000,656) rotate(6)"><use href="#brick" transform="scale(0.6)"/></g>
+  <g transform="translate(1120,653) rotate(-5)"><use href="#brick" transform="scale(0.6)"/></g>
+
+  <!-- "..." more workers implied on both sides -->
+  <text x="500" y="700" text-anchor="middle" class="n" font-size="44" fill="#1a1a1a">...</text>
+  <text x="1280" y="700" text-anchor="middle" class="n" font-size="44" fill="#1a1a1a">...</text>
+
+  <!-- bracket across all workers -->
+  <path d="M300,740 L300,766 L1460,766 L1460,740" stroke="#e8862d" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="880" y="804" text-anchor="middle" class="n" font-size="28" fill="#e8862d">10,000 threads — same step, right now</text>
+
+  <!-- lone CPU chef on far left watching -->
+  <g transform="translate(200,630) scale(1.3)">
+    <use href="#xh"/>
+    <path d="M-22,-2 C-42,-16 -54,-20 -66,-14" fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="-68" cy="-12" r="6" fill="#1a1a1a"/>
+  </g>
+  <!-- chef hat -->
+  <g transform="translate(200,510)">
+    <path d="M-22,-6 L-14,-50 C-10,-60 22,-60 26,-50 L34,-6 Z" fill="#ffffff" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M-24,-6 L36,-6" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M0,-46 C-6,-56 18,-56 12,-46" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <text x="200" y="380" text-anchor="middle" class="n" font-size="24" fill="#d64545" transform="rotate(-3 200 380)">CPU: still</text>
+  <text x="200" y="410" text-anchor="middle" class="n" font-size="24" fill="#d64545" transform="rotate(-3 200 410)">on brick #1</text>
+</svg>
